@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>웹 일정관리 및 포모도로 타이머</title>
+</head>
+<body>
+    <header>
+        <h1>🍅 포모도로 & 할 일 관리</h1>
+        <p>25분 집중하고 5분 휴식하며 오늘 할 일을 완료해보세요!</p>
+    </header>
+
+    <main>
+        <!-- 포모도로 타이머 영역 -->
+        <section id="timer-section">
+            <h2>포모도로 타이머</h2>
+            <div>
+                <button id="mode-focus">집중 모드 (25분)</button>
+                <button id="mode-break">휴식 모드 (5분)</button>
+            </div>
+            <div id="timer-display">25:00</div>
+            <div>
+                <button id="start-btn">시작</button>
+                <button id="pause-btn">일시정지</button>
+                <button id="reset-btn">초기화</button>
+            </div>
+            <p>오늘 완료한 포모도로: <span id="pomodoro-count">0</span>회</p>
+        </section>
+
+        <!-- 할 일(To-Do) 목록 영역 -->
+        <section id="todo-section">
+            <h2>오늘의 할 일 (To-Do)</h2>
+            <div>
+                <input type="text" id="todo-input" placeholder="할 일을 입력하세요">
+                <button id="add-todo-btn">추가</button>
+            </div>
+            <ul id="todo-list">
+                <!-- 할 일 목록이 여기에 추가됩니다 -->
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2026 김승진 (1인분투) - Open Source Software Project (MIT License)</p>
+    </footer>
+</body>
+</html>
