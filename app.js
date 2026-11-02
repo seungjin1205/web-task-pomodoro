@@ -1,3 +1,5 @@
+//1. 포모도로 타이머 기능
+
 // 포모도로 타이머 관련 변수 설정
 const FOCUS_TIME = 25 * 60; // 25분 (초 단위)
 const BREAK_TIME = 5 * 60;  // 5분 (초 단위)
@@ -97,5 +99,120 @@ resetBtn.addEventListener('click', resetTimer);
 modeFocusBtn.addEventListener('click', () => switchMode(true));
 modeBreakBtn.addEventListener('click', () => switchMode(false));
 
-// 초기 화면 표시
+
+
+
+
+// 2. 할 일(To-Do) 목록 관리 기능
+
+let todos = [];
+
+const todoInput = document.getElementById('todo-input');
+const addTodoBtn = document.getElementById('add-todo-btn');
+const todoList = document.getElementById('todo-list');
+
+// 할 일 목록을 화면에 그리는 함수
+function renderTodos() {
+    todoList.innerHTML = '';
+
+    todos.forEach((todo, index) => {
+        const li = document.createElement('li');
+        li.className = 'todo-item';
+        if (todo.completed) {
+            li.classList.add('completed');
+        }
+
+        // 체크박스와 텍스트 영역
+        const leftDiv = document.createElement('div');
+        leftDiv.className = 'todo-left';
+        leftDiv.addEventListener('click', () => toggleTodo(index));
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = todo.completed;
+
+        const textSpan = document.createElement('span');
+        textSpan.textContent = todo.text;
+
+        leftDiv.appendChild(checkbox);
+        leftDiv.appendChild(textSpan);
+
+        // 삭제 버튼
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'delete-btn';
+        deleteBtn.textContent = '삭제';
+        deleteBtn.addEventListener('click', () => deleteTodo(index));
+
+        li.appendChild(leftDiv);
+        li.appendChild(deleteBtn);
+        todoList.appendChild(li);
+    });
+}
+
+// 새 할 일 추가 함수
+function addTodo() {
+    const text = todoInput.value.trim();
+    if (text === '') {
+        alert('할 일을 입력해주세요!');
+        return;
+    }
+
+    todos.push({
+        text: text,
+        completed: false
+    });
+
+    todoInput.value = '';
+    renderTodos();
+}
+
+// 할 일 완료 체크/해제 함수
+function toggleTodo(index) {
+    todos[index].completed = !todos[index].completed;
+    renderTodos();
+}
+
+// 할 일 삭제 함수
+function deleteTodo(index) {
+    todos.splice(index, 1);
+    renderTodos();
+}
+
+// 추가 버튼 클릭 및 엔터키 이벤트 연결
+addTodoBtn.addEventListener('click', addTodo);
+todoInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        addTodo();
+    }
+});
+
+
+// 3. 브라우저 로컬 스토리지(Local Storage) 연동
+const STORAGE_KEY_TODOS = 'web_pomodoro_todos';
+const STORAGE_KEY_COUNT = 'web_pomodoro_count';
+
+// 데이터를 로컬 스토리지에 JSON 형태로 저장하는 함수
+function saveData() {
+    localStorage.setItem(STORAGE_KEY_TODOS, JSON.stringify(todos));
+    localStorage.setItem(STORAGE_KEY_COUNT, String(pomodoroCount));
+}
+
+// 페이지 로드 시 로컬 스토리지에서 데이터를 불러오는 함수
+function loadData() {
+    const savedTodos = localStorage.getItem(STORAGE_KEY_TODOS);
+    const savedCount = localStorage.getItem(STORAGE_KEY_COUNT);
+
+    if (savedTodos !== null) {
+        todos = JSON.parse(savedTodos);
+    }
+
+    if (savedCount !== null) {
+        pomodoroCount = parseInt(savedCount, 10) || 0;
+        pomodoroCountSpan.textContent = pomodoroCount;
+    }
+}
+
+// 초기 실행: 저장된 데이터 불러오기 및 화면 갱신
+loadData();
 updateTimerDisplay();
+renderTodos();
